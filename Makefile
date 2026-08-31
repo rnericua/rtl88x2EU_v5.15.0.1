@@ -14,6 +14,14 @@ EXTRA_CFLAGS += -Wno-unused-variable
 #EXTRA_CFLAGS += -Wno-unused-function
 #EXTRA_CFLAGS += -Wno-unused
 #EXTRA_CFLAGS += -Wno-uninitialized
+# gcc 14/15 + kernel 7.0 build hygiene
+EXTRA_CFLAGS += -Wno-missing-prototypes
+EXTRA_CFLAGS += -Wno-missing-declarations
+EXTRA_CFLAGS += -Wno-implicit-fallthrough
+EXTRA_CFLAGS += -Wno-stringop-overread
+EXTRA_CFLAGS += -Wno-restrict
+EXTRA_CFLAGS += -Wno-format-truncation
+EXTRA_CFLAGS += -Wno-address
 
 ############ ANDROID COMMON KERNEL ############
 # clang
@@ -2573,6 +2581,8 @@ $(MODULE_NAME)-$(CONFIG_MP_INCLUDED)+= core/rtw_bt_mp.o
 endif
 
 obj-$(CONFIG_RTL8822EU) := $(MODULE_NAME).o
+# kbuild on kernels 6.15+ ignores EXTRA_CFLAGS; keep flags visible
+ccflags-y += $(EXTRA_CFLAGS)
 
 else
 

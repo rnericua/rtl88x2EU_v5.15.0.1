@@ -274,7 +274,7 @@ void _tdls_generate_tpk(void *sta, const u8 *own_addr, const u8 *bssid)
 		nonce[1] = SNonce;
 	}
 
-	sha256_vector(2, nonce, len, key_input);
+	rtw_sha256_vector(2, nonce, len, key_input);
 
 	/*
 	 * TPK = KDF-Hash-Length(TPK-Key-Input, "TDLS PMK",
@@ -291,6 +291,6 @@ void _tdls_generate_tpk(void *sta, const u8 *own_addr, const u8 *bssid)
 
 	_rtw_memcpy(data + 2 * ETH_ALEN, bssid, ETH_ALEN);
 
-	sha256_prf(key_input, SHA256_MAC_LEN, "TDLS PMK", data, sizeof(data), (u8 *)&psta->tpk, sizeof(psta->tpk));
+	rtw_sha256_prf(key_input, SHA256_MAC_LEN, "TDLS PMK", data, sizeof(data), (u8 *)&psta->tpk, sizeof(psta->tpk));
 }
 #endif /* CONFIG_TDLS */

@@ -9,7 +9,7 @@
 #ifndef WLANCRYPTO_WRAP_H
 #define WLANCRYPTO_WRAP_H
 
-int sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
+int rtw_sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
 	u8 *mac);
 
 u8* ccmp_decrypt(_adapter *padapter, const u8 *tk, const struct ieee80211_hdr *hdr,

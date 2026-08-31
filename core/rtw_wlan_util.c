@@ -1471,7 +1471,7 @@ int WMM_param_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 			return _FAIL;
 		} else {
 			pmlmeinfo->WMM_enable = 1;
-			_rtw_rtw_memcpy(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element));
+			_rtw_memcpy(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element));
 			return _TRUE;
 		}
 	} else {

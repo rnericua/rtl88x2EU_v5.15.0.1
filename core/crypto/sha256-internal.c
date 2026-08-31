@@ -16,14 +16,14 @@
 
 
 /**
- * sha256_vector - SHA256 hash for data vector
+ * rtw_sha256_vector - SHA256 hash for data vector
  * @num_elem: Number of elements in the data vector
  * @addr: Pointers to the data areas
  * @len: Lengths of the data blocks
  * @mac: Buffer for the hash
  * Returns: 0 on success, -1 of failure
  */
-int sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
+int rtw_sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
 		  u8 *mac)
 {
 	struct _sha256_state ctx;

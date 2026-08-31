@@ -17,10 +17,19 @@
 #include <drv_types.h>
 #include <hal_data.h>
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0))
+#define strlcpy strscpy
+#endif
+
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
 MODULE_AUTHOR("Realtek Semiconductor Corp.");
 MODULE_VERSION(DRIVERVERSION);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
+MODULE_IMPORT_NS("VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver");
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0))
+MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
+#endif
 
 /* module param defaults */
 int rtw_chip_version = 0x00;
@@ -3383,7 +3392,7 @@ int _netdev_vir_if_open(struct net_device *pnetdev)
 		rtw_mbid_camid_alloc(padapter, adapter_mac_addr(padapter));
 #endif
 		rtw_init_wifidirect_addrs(padapter, adapter_mac_addr(padapter), adapter_mac_addr(padapter));
-		_rtw_memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
+		dev_addr_mod(pnetdev, 0, adapter_mac_addr(padapter), ETH_ALEN);
 	}
 #endif /*CONFIG_PLATFORM_INTEL_BYT*/
 
@@ -4149,7 +4158,7 @@ int _netdev_open(struct net_device *pnetdev)
 		rtw_mbid_camid_alloc(padapter, adapter_mac_addr(padapter));
 #endif
 		rtw_init_wifidirect_addrs(padapter, adapter_mac_addr(padapter), adapter_mac_addr(padapter));
-		_rtw_memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
+		dev_addr_mod(pnetdev, 0, adapter_mac_addr(padapter), ETH_ALEN);
 #endif /* CONFIG_PLATFORM_INTEL_BYT */
 
 		rtw_clr_surprise_removed(padapter);
