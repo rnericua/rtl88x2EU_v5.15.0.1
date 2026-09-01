@@ -1316,10 +1316,23 @@ pre_init_system_cfg_8822e(struct halmac_adapter *adapter)
 	enable_bb = 0;
 	set_hw_value_88xx(adapter, HALMAC_HW_EN_BB_RF, &enable_bb);
 
-	if (HALMAC_REG_R8(REG_SYS_CFG1 + 2) & BIT(4)) {
+/*	if (HALMAC_REG_R8(REG_SYS_CFG1 + 2) & BIT(4)) {
 		PLTFM_MSG_ERR("[ERR]test mode!!\n");
 		return HALMAC_RET_WLAN_MODE_FAIL;
 	}
+*/
+	{
+		u8 sys_cfg1_b2 = HALMAC_REG_R8(REG_SYS_CFG1 + 2);
+
+		if (sys_cfg1_b2 & BIT(4)) {
+			PLTFM_MSG_ERR("[ERR]test mode bit set (SYS_CFG1+2=0x%02x); ignoring\n",
+				      sys_cfg1_b2);
+			/* Do not return HALMAC_RET_WLAN_MODE_FAIL. */
+		}
+	}
+
+
+
 
 	PLTFM_MSG_TRACE("[TRACE]%s <===\n", __func__);
 
