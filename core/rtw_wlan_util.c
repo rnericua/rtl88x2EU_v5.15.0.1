@@ -2215,6 +2215,7 @@ int check_ielen(u8 *start, uint len)
 	int left = len;
 	u8 *pos = start;
 	u8 id, elen;
+	int parsed = 0;
 
 	while (left >= 2) {
 		id = *pos++;
@@ -2224,16 +2225,18 @@ int check_ielen(u8 *start, uint len)
 		if (elen > left) {
 			RTW_INFO("IEEE 802.11 element parse failed (id=%d elen=%d left=%lu)\n",
 					id, elen, (unsigned long) left);
-			return _FALSE;
+			/* Truncated tail after valid IEs: still accept the frame. */
+			return parsed ? _TRUE : _FALSE;
 		}
 		if ((id == WLAN_EID_VENDOR_SPECIFIC) && (elen < 3))
-				return _FALSE;
+				return parsed ? _TRUE : _FALSE;
 
 		left -= elen;
 		pos += elen;
+		parsed++;
 	}
 	if (left)
-		return _FALSE;
+		return parsed ? _TRUE : _FALSE;
 
 	return _TRUE;
 }

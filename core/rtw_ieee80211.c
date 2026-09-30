@@ -261,6 +261,42 @@ u8 *rtw_set_fixed_ie(unsigned char *pbuf, unsigned int len, unsigned char *sourc
 	return pbuf + len;
 }
 
+/*
+ * Walk a packed IE buffer and cut it at the first invalid element.
+ * Also drop Supported Operating Classes (59) and EID 80 when the
+ * declared length is not a plausible list. Returns valid byte count.
+ */
+uint rtw_ies_sanitize(u8 *ies, uint ies_len)
+{
+	uint left = ies_len;
+	u8 *pos = ies;
+
+	if (!ies || ies_len < 2)
+		return 0;
+
+	while (left >= 2) {
+		u8 id = pos[0];
+		u8 elen = pos[1];
+
+		if ((uint)(2 + elen) > left) {
+			RTW_INFO("%s: drop tail id=%u elen=%u left=%u\n",
+				 __func__, id, elen, left);
+			break;
+		}
+
+		if ((id == 59 || id == 80) && elen > 64) {
+			RTW_INFO("%s: drop implausible id=%u elen=%u\n",
+				 __func__, id, elen);
+			break;
+		}
+
+		pos += 2 + elen;
+		left -= 2 + elen;
+	}
+
+	return (uint)(pos - ies);
+}
+
 /* rtw_set_ie will update frame length */
 u8 *rtw_set_ie
 (
@@ -1667,7 +1703,8 @@ ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
 					 "left=%lu)\n",
 					 id, elen, (unsigned long) left);
 			}
-			return ParseFailed;
+			/* Keep IEs already collected; drop the truncated tail. */
+			break;
 		}
 
 		switch (id) {

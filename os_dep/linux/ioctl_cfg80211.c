@@ -5482,6 +5482,16 @@ static int rtw_add_beacon(_adapter *adapter, const u8 *head, size_t head_len, co
 
 	len = head_len + tail_len - 24;
 
+	if (len > _FIXED_IE_LENGTH_) {
+		uint var = len - _FIXED_IE_LENGTH_;
+		uint keep = rtw_ies_sanitize(pbuf + _FIXED_IE_LENGTH_, var);
+
+		if (keep < var)
+			RTW_INFO("%s: sanitized beacon IEs %u -> %u\n",
+				 __func__, var, keep);
+		len = _FIXED_IE_LENGTH_ + keep;
+	}
+
 	/* check wps ie if inclued */
 	if (rtw_get_wps_ie(pbuf + _FIXED_IE_LENGTH_, len - _FIXED_IE_LENGTH_, NULL, &wps_ielen))
 		RTW_INFO("add bcn, wps_ielen=%d\n", wps_ielen);
