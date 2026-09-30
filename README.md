@@ -5,7 +5,7 @@ This tree is the [rnericua/rtl88x2EU_v5.15.0.1](https://github.com/rnericua/rtl8
 base driver with compatibility changes required to build against
 **Linux 7.0.0-30-generic** (and other 6.13–7.2 kernels).
 
-The produced module name is `88x2eu.ko` (see `MODULE_NAME` in the Makefile).
+The produced module name is `8812eu.ko` (see `MODULE_NAME` in the Makefile).
 
 ## Compatibility changes applied
 
@@ -38,14 +38,14 @@ make clean
 make -j"$(nproc)"
 sudo make install
 sudo depmod -a
-sudo modprobe 88x2eu
+sudo modprobe 8812eu
 ```
 
 Confirm:
 
 ```bash
 uname -r          # expect 7.0.0-30-generic
-lsmod | grep 88x2
+lsmod | grep 8812
 dmesg | tail
 ```
 
