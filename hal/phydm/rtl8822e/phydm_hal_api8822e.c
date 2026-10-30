@@ -2048,7 +2048,7 @@ config_phydm_switch_bandwidth_8822e(struct dm_struct *dm, u8 pri_ch,
 			odm_set_bb_reg(dm, R_0x9b0, 0xffc0, 0x1);
 
 			/*DAC clock = 120M clock for BW5 */
-			odm_set_bb_reg(dm, R_0x9b4, 0x00000700, 0x2);
+			odm_set_bb_reg(dm, R_0x9b4, 0x00000700, 0x4);
 
 			/*ADC clock = 40M clock for BW5 */
 			odm_set_bb_reg(dm, R_0x9b4, 0x00700000, 0x4);
